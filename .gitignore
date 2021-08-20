@@ -1,0 +1,4 @@
+.vscode/settings.json
+auth_config.json
+utils/__pycache__/selenium_helper.cpython-38.pyc
+*.pyc
