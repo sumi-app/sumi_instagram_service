@@ -8,12 +8,15 @@ from flask_cors import CORS
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import os
+from dotenv import load_dotenv
 from message_sender.msg_sender import send_message_to_account
 
 app = Eve()
 
 CORS(app)
 app.config['JSON_AS_ASCII'] = False
+
+load_dotenv()
 
 
 @app.after_request
@@ -36,8 +39,8 @@ def get_arg_from_request(req, arg_name: str):
 @app.route('/write')
 def write_to_user():
     ig_login = get_arg_from_request(request, 'login')
-
-    send_message_to_account(ig_login)
+    bot_msg = get_arg_from_request(request, 'bot_msg')
+    send_message_to_account(ig_login, bot_msg)
 
     response = app.response_class(
         response=json.dumps(ig_login, ensure_ascii=False, indent=4),

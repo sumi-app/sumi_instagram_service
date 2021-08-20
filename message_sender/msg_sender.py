@@ -1,3 +1,4 @@
+import os
 from time import sleep
 
 import requests
@@ -7,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import json
 
 
-def send_message_to_account(login):
+def send_message_to_account(login, bot_msg):
     chrome_options = Options()
     # Add for opening screen
     # chrome_options.add_argument("--headless")
@@ -20,11 +21,11 @@ def send_message_to_account(login):
 
     login_field = driver.find_element_by_xpath(
         "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
-    login_field.send_keys('uralskycry')
+    login_field.send_keys(os.getenv('INSTA_LOGIN'))
 
     pwd_field = driver.find_element_by_xpath(
         "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
-    pwd_field.send_keys('FROMTHEURAL232323')
+    pwd_field.send_keys(os.getenv('INSTA_PASS'))
 
     driver.find_element_by_xpath(
         "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button").click()
@@ -59,7 +60,7 @@ def send_message_to_account(login):
         print('Close banner exception')
 
     text_field = driver.find_element_by_xpath("/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea")
-    text_field.send_keys("Я бот ла ла ла ла пишу с сервера SUMI")
+    text_field.send_keys(bot_msg)
 
     send_msg_button = driver.find_element_by_xpath("/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button")
     send_msg_button.click()
