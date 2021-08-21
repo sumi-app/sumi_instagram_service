@@ -16,7 +16,7 @@ def get_chrome_driver() -> WebDriver:
     chrome_driver_binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     driver: WebDriver = None
 
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
 
