@@ -7,8 +7,8 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import json
 from selenium.webdriver.chrome.webdriver import WebDriver
-from auth_manager.auth_manager import auth_with_login_and_pass
 
+from auth_manager.auth_manager import auth_with_login_and_pass
 
 
 def get_chrome_driver() -> WebDriver:
@@ -16,7 +16,7 @@ def get_chrome_driver() -> WebDriver:
     chrome_driver_binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     driver: WebDriver = None
 
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
 
@@ -30,6 +30,7 @@ def get_chrome_driver() -> WebDriver:
             "CHROMEDRIVER_PATH"), chrome_options=options)
 
     return driver
+
 
 def send_message_to_account(login, bot_msg):
     # chrome_options = Options()
@@ -69,8 +70,10 @@ def send_message_to_account(login, bot_msg):
     except:
         print('Close banner exception')
 
-    text_field = driver.find_element_by_xpath("/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea")
+    text_field = driver.find_element_by_xpath(
+        "/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea")
     text_field.send_keys(bot_msg)
 
-    send_msg_button = driver.find_element_by_xpath("/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button")
+    send_msg_button = driver.find_element_by_xpath(
+        "/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button")
     send_msg_button.click()

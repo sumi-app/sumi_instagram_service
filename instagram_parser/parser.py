@@ -9,26 +9,12 @@ from dotenv import load_dotenv
 from auth_manager.auth_manager import auth_with_login_and_pass
 
 
-def parse_accounts(tag):
+def parse_accounts_with_driver(tag, driver):
     url = f"https://www.instagram.com/explore/tags/{tag}/"
-    chrome_options = Options()
-    # Add for opening screen
-    # chrome_options.add_argument("--headless")
-    chrome_options.add_argument('log-level=2')
-    driver = webdriver.Chrome(ChromeDriverManager().install(), 0, chrome_options)
-
-    auth_with_login_and_pass(driver)
-    sleep(10)
     driver.get(url)
 
     # scroll(driver)
     sleep(10)
-
-    # for i in range(5):
-    #     driver.execute_script("window.scrollBy(0, 250)")
-    #     # posts = driver.find_elements_by_class_name("kIKUG")
-    #     # driver.execute_script("arguments[0].scrollIntoView(true);", posts[len(posts) - 1])
-    #     # sleep(5)
 
     favorite_posts_row = driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[1]/div/div")
     favorites_posts = favorite_posts_row.find_elements_by_class_name("kIKUG")
@@ -40,34 +26,48 @@ def parse_accounts(tag):
         links.append(l)
 
     for link in links:
-        driver.get(f"{link}")
-        sleep(6)
-        driver.find_element_by_class_name("e1e1d").click()
-        sleep(6)
-        followers_count = driver.find_element_by_xpath(
-            "/html/body/div[1]/section/main/div/header/section/ul/li[2]/a/span").get_attribute('title')
-        nik = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2").text
-        description = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[2]/span").text
-        name = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[2]/h1").text
+        try:
+            driver.get(f"{link}")
+            sleep(6)
+            driver.find_element_by_class_name("e1e1d").click()
+            sleep(6)
+            followers_count = driver.find_element_by_xpath(
+                "/html/body/div[1]/section/main/div/header/section/ul/li[2]/a/span").get_attribute('title')
+            nik = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2").text
+            description = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[2]/span").text
+            name = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[2]/h1").text
 
-        print(followers_count, nik, description, name)
+            print(followers_count, nik, description, name)
 
-        count_replaced = followers_count.replace(' ', '')
-        # type(count_replaced)
-        # print(count_replaced)
-        json_data = json.dumps({
-            "name": str(name),
-            "login": str(nik),
-            "description": str(description),
-            "count": int(count_replaced),
-            "social_network": 3,
-            "is_selected": False,
-        }, ensure_ascii=False)
-        json_data.encode('unicode_escape')
-        print(json_data)
-        headers = {'Content-Type': 'text/text; charset=utf-8'}
-        r = requests.post("http://localhost:8080/api/blogger", data=json_data.encode("utf-8"), headers=headers)
-        print(r.status_code, r.reason)
+            count_replaced = followers_count.replace(' ', '')
+            # type(count_replaced)
+            # print(count_replaced)
+            json_data = json.dumps({
+                "name": str(name),
+                "login": str(nik),
+                "description": str(description),
+                "count": int(count_replaced),
+                "social_network": 3,
+                "is_selected": False,
+            }, ensure_ascii=False)
+            json_data.encode('unicode_escape')
+            print(json_data)
+            headers = {'Content-Type': 'text/text; charset=utf-8'}
+            r = requests.post("http://localhost:8080/api/blogger", data=json_data.encode("utf-8"), headers=headers)
+            print(r.status_code, r.reason)
+        except:
+            print('Parse error')
+
+
+def start_driver():
+    chrome_options = Options()
+    # Add for opening screen
+    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument('log-level=2')
+    driver = webdriver.Chrome(ChromeDriverManager().install(), 0, chrome_options)
+    auth_with_login_and_pass(driver)
+    sleep(10)
+    return driver
 
 
 # def scroll(driver):
@@ -84,9 +84,11 @@ def parse_accounts(tag):
 
 if __name__ == '__main__':
     load_dotenv()
-    tags = ['самара']
+    driver = start_driver()
+    # 'самара',
+    tags = ['самарасити', 'самара63', 'самарабогатая', 'самарагородок', 'самарафото', 'самаракрасивая', 'самарагородкурорт', 'самараонлайн', 'самараарена', 'самарадетям', 'самараброви', 'самарадевушки']
     for tag in tags:
-        parse_accounts(tag)
+        parse_accounts_with_driver(tag, driver)
 
 # def parse_account_data(login):
 
