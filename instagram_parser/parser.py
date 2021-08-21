@@ -23,6 +23,13 @@ def parse_accounts(tag):
 
     # scroll(driver)
     sleep(10)
+
+    # for i in range(5):
+    #     driver.execute_script("window.scrollBy(0, 250)")
+    #     # posts = driver.find_elements_by_class_name("kIKUG")
+    #     # driver.execute_script("arguments[0].scrollIntoView(true);", posts[len(posts) - 1])
+    #     # sleep(5)
+
     favorite_posts_row = driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[1]/div/div")
     favorites_posts = favorite_posts_row.find_elements_by_class_name("kIKUG")
 
@@ -76,7 +83,9 @@ def parse_accounts(tag):
 
 if __name__ == '__main__':
     load_dotenv()
-    parse_accounts('самара')
+    tags = ['самара']
+    for tag in tags:
+        parse_accounts(tag)
 
 # def parse_account_data(login):
 
