@@ -1,5 +1,7 @@
+import json
 from time import sleep
 
+import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -7,8 +9,8 @@ from dotenv import load_dotenv
 from auth_manager.auth_manager import auth_with_login_and_pass
 
 
-def parse_accounts():
-    url = "https://www.instagram.com/explore/tags/самара/"
+def parse_accounts(tag):
+    url = f"https://www.instagram.com/explore/tags/{tag}/"
     chrome_options = Options()
     # Add for opening screen
     # chrome_options.add_argument("--headless")
@@ -43,6 +45,22 @@ def parse_accounts():
 
         print(followers_count, nik, description, name)
 
+        count_replaced = followers_count.replace(' ', '')
+        # type(count_replaced)
+        # print(count_replaced)
+        json_data = json.dumps({
+            "name": str(name),
+            "login": str(nik),
+            "description": str(description),
+            "count": int(count_replaced),
+            "social_network": 3,
+        }, ensure_ascii=False)
+        json_data.encode('unicode_escape')
+        print(json_data)
+        headers = {'Content-Type': 'text/text; charset=utf-8'}
+        r = requests.post("http://localhost:8080/api/blogger", data=json_data.encode("utf-8"), headers=headers)
+        print(r.status_code, r.reason)
+
 
 # def scroll(driver):
 #     end_post = driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[1]/div/div/div[3]/div[3]")
@@ -58,7 +76,7 @@ def parse_accounts():
 
 if __name__ == '__main__':
     load_dotenv()
-    parse_accounts()
+    parse_accounts('самара')
 
 # def parse_account_data(login):
 
