@@ -13,7 +13,7 @@ from auth_manager.auth_manager import auth_with_login_and_pass
 def send_message_to_account(login, bot_msg):
     chrome_options = Options()
     # Add for opening screen
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
     chrome_options.add_argument('log-level=2')
     driver = webdriver.Chrome(ChromeDriverManager().install(), 0, chrome_options)
 
