@@ -61,6 +61,7 @@ def parse_accounts(tag):
             "description": str(description),
             "count": int(count_replaced),
             "social_network": 3,
+            "is_selected": False,
         }, ensure_ascii=False)
         json_data.encode('unicode_escape')
         print(json_data)
