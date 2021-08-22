@@ -6,7 +6,6 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 
-from instagram_parser.parser import parse_accounts
 from message_sender.msg_sender import send_message_to_account
 
 app = Eve()
@@ -48,16 +47,16 @@ def write_to_user():
     return response
 
 
-@app.route('/parse')
-def parse_users():
-    account = parse_accounts()
-
-    response = app.response_class(
-        response=json.dumps(account, ensure_ascii=False, indent=4),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
+# @app.route('/parse')
+# def parse_users():
+#     account = parse_accounts()
+#
+#     response = app.response_class(
+#         response=json.dumps(account, ensure_ascii=False, indent=4),
+#         status=200,
+#         mimetype='application/json'
+#     )
+#     return response
 
 
 if __name__ == '__main__':

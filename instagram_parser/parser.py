@@ -36,8 +36,11 @@ def parse_accounts_with_driver(tag, driver):
             nik = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[1]/h2").text
             description = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[2]/span").text
             name = driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/div[2]/h1").text
+            avatar = str(driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/div/div/span/img").get_attribute("src"))
 
-            print(followers_count, nik, description, name)
+            print('---------------------------------------------------------------------------')
+            print(followers_count, nik, description, name, avatar)
+            print('---------------------------------------------------------------------------')
 
             count_replaced = followers_count.replace(' ', '')
             # type(count_replaced)
@@ -49,6 +52,7 @@ def parse_accounts_with_driver(tag, driver):
                 "count": int(count_replaced),
                 "social_network": 3,
                 "is_selected": False,
+                "avatar": avatar,
             }, ensure_ascii=False)
             json_data.encode('unicode_escape')
             print(json_data)
@@ -86,7 +90,7 @@ if __name__ == '__main__':
     load_dotenv()
     driver = start_driver()
     # 'самара',
-    tags = ['самарасити', 'самара63', 'самарабогатая', 'самарагородок', 'самарафото', 'самаракрасивая', 'самарагородкурорт', 'самараонлайн', 'самараарена', 'самарадетям', 'самараброви', 'самарадевушки']
+    tags = ['самара', 'самарасити', 'самара63', 'самарабогатая', 'самарагородок', 'самарафото', 'самаракрасивая', 'самарагородкурорт', 'самараонлайн', 'самараарена', 'самарадетям', 'самараброви', 'самарадевушки']
     for tag in tags:
         parse_accounts_with_driver(tag, driver)
 
